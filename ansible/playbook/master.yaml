@@ -1,0 +1,6 @@
+- hosts: 5gcorevm
+  roles:
+  - role: gantsign.golang
+    go_version: 1.15.8
+    golang_gopath: '$HOME/go'
+  - '../roles/5gcore'

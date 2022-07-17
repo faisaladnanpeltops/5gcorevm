@@ -1,0 +1,41 @@
+#cloud-config
+autoinstall:
+  version: 1
+  locale: en_US
+  keyboard:
+    layout: us
+  identity:
+    hostname: ubuntu-server
+    password: "$6$exDY1mhS4KUYCE/2$zmn9ToZwTKLhCw.b4/b.ZRTIZM30JZ4QrOQ2aOXJ8yk96xpcCof0kxKwuX1kqLG/ygbJ1f8wxED22bTL4F46P0"
+    username: ubuntu  
+  ssh:
+    install-server: true
+    allow-pw: true
+  packages:
+    - qemu-guest-agent
+  network:
+    network:
+      version: 2
+      ethernets:
+        eth0:
+          addresses: [10.10.10.110/24]
+          gateway4: 10.10.10.1
+          nameservers:
+            addresses: [8.8.8.8]
+            search: [peltops.com]        
+  storage:
+    layout:
+      name: direct
+    swap:
+      size: 0
+  early-commands:
+  # otherwise packer tries to connect and exceed max attempts:
+    - systemctl stop ssh      
+  late-commands:   
+    - echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/ubuntu
+    - sed -ie 's/GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"/' /target/etc/default/grub
+    - curtin in-target --target /target update-grub2
+    - curtin in-target --target=/target -- apt update           
+    - curtin in-target --target=/target -- apt upgrade -y
+
+

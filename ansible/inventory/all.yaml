@@ -1,0 +1,9 @@
+all:
+  hosts:
+    5gcorevm:
+      ansible_host: 10.10.10.20
+      ip: 10.10.10.20
+      access_ip: 10.10.10.20
+      ansible_user: ubuntu
+      ansible_become: true
+      ansible_python_interpreter: '/usr/bin/env python3'

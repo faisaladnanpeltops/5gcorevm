@@ -1,0 +1,11 @@
+---
+- name: include install packages task
+  include_tasks: pkg.yaml
+
+- name: set ip forward
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: yes  
+
+ 
